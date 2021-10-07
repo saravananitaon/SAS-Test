@@ -1,0 +1,49 @@
+%macro e2(filepath);
+
+libname e1lib "C:\Users\admin\Desktop\test\table" ;
+
+%let dir = %scan(&filepath. , -1,'\');
+
+proc sql ;
+
+select count(*) into : n 
+
+from e1lib.&dir. ;
+
+quit ;
+
+%do i = 1 %to &n. ;
+
+ data _null_ ;
+
+  set e1lib.&dir. ;
+
+
+ if _n_ = &i. then 
+
+  call symput('x' , strip(filenm));
+
+ run;
+
+%if %index(&x , xls) %then %do ;
+
+proc import datafile = "&filepath.&x."
+            out = f_&i.
+            dbms = xls replace ; run;
+
+%end ;
+
+%if %index(&x , csv) %then %do ;
+
+proc import datafile = "&filepath.&x."
+            out = f_&i.
+            dbms = csv replace ; run;
+
+%end ;
+
+%end ;
+
+%mend ;
+
+%e2(C:\Users\admin\Desktop\test\);
+
