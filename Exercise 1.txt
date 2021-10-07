@@ -1,0 +1,27 @@
+%macro e1(filepath);
+
+libname e1lib "C:\Users\admin\Desktop\test\table" ;
+
+%let locref = &filepath. ;
+%let dir = %scan(&filepath. ,-1,'\');
+
+data e1lib.&dir. (keep = filenm) ;
+
+  rc = filename("Mydir" , "&locref");
+  did = dopen("Mydir");
+  num = dnum(did);  /* num denotes number of input files */
+  
+  do i = 1 to num ;
+   
+   filenm = dread(did , i);
+   
+  output;
+  
+  end ;
+  run;
+  
+  %mend ;
+  
+  
+
+%e1(C:\Users\admin\Desktop\test\); /* we can pass any directory dynamically */
