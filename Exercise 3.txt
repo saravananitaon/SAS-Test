@@ -1,0 +1,5 @@
+%include "C:\Users\admin\Desktop\test\Exercise 1.txt" ;
+
+%include "C:\Users\admin\Desktop\test\Exercise 2.txt" ;
+
+/* No need to call any macro simply run above code in sas which combine Exercise 1 and Exercise 2 */

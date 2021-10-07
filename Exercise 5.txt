@@ -1,0 +1,52 @@
+%macro e5(filepath);
+
+libname e1lib "C:\Users\admin\Desktop\test\table" ;
+
+proc sql ;
+
+select count(*) into : n 
+
+from e1lib.final ;
+
+quit ;
+
+
+%do i = 1 %to &n. ;
+
+ data _null_ ;
+
+  set e1lib.final ;
+
+ if _n_ = &i. then call symput('x' , strip(filenm));
+
+
+if _n_ = &i. %then %do ;
+
+  %if result_&i. ne 0 %then %do ;
+
+    %if %index(&x , xls) %then %do ; 
+
+       proc import datafile = "&filepath.&x."
+            out = f_&i.
+            dbms = xls replace ; run;
+
+    %end; 
+
+   %if %index(&x , csv) %then %do ; 
+
+       proc import datafile = "&filepath.&x."
+            out = f_&i.
+            dbms = csv replace ; run;
+
+    %end;
+
+ %end ;
+
+%end ;
+
+%end ; /* do loop close */
+
+%e5(C:\Users\admin\Desktop\test\);
+
+
+
